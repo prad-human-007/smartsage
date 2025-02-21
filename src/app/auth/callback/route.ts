@@ -13,18 +13,10 @@ export async function GET(request: Request) {
   console.log("GET /auth/callback Thisis the code: ", code);
   if (code) {
     const supabase = await createClient();
-    const {data: {session} }  = await supabase.auth.exchangeCodeForSession(code);
+    const {data: {session}, error }  = await supabase.auth.exchangeCodeForSession(code);
     const token = session?.access_token;
-    if(token) {
-      const response = await fetch(`${origin}/api/createUser`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
-      const res = await response.json();
-      console.log("Response of the fetch: ", res);
-    }
+    if(!error && token){ 
+      console.log("User Created ", token);
   }
 
   if (redirectTo) {
@@ -33,4 +25,5 @@ export async function GET(request: Request) {
 
   // URL to redirect to after sign up process completes
   return NextResponse.redirect(`${origin}/`);
+  }
 }
