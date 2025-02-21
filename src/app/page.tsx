@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
-
+import { SignInButton, SignUpButton, SignOutButton } from "@/components/auth/auth-buttons";
 
 export default async function Home() {
 
@@ -8,10 +8,14 @@ export default async function Home() {
 
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <div>Hello {user?.email}</div>
-      <a href="/sign-in">Sign In</a>
-      <a href="/sign-up">Sign Up</a>
+    <div className="flex flex-col items-center justify-center min-h-screen py-2 gap-3">
+      <div className="text-xl">Hello {user?.email}!!</div>
+      <div className="flex gap-3">
+      <SignInButton />
+      <SignUpButton />
+      <SignOutButton />
+      </div>
+      
     </div>  
     );
 }
