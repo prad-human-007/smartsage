@@ -5,8 +5,8 @@ import { useState } from 'react';
 import Markdown from 'react-markdown'
 
 interface Msg{
-    role: 'user' | 'agent'
-    text: string;
+    role: 'user' | 'model'
+    parts: {text: string}[];
 }
 
 export default function ChatAIPage({ params: { class_id } }: { params: { class_id: string } }) {
@@ -17,7 +17,7 @@ export default function ChatAIPage({ params: { class_id } }: { params: { class_i
         if (e.key === 'Enter') {
             e.preventDefault();
             if(inputText === '') return;
-            setMessages((prev) => [...prev, {role: 'user', text: inputText}]);
+            setMessages([...messages, {role: 'user', parts: [{text: inputText}]}]);
             setInputText('');
 
             const response = await fetch('/api/chat-reply', {
@@ -25,13 +25,13 @@ export default function ChatAIPage({ params: { class_id } }: { params: { class_i
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({input: inputText}),
+                body: JSON.stringify({chat_history: { history: messages }, input: inputText}),
             })
             const { message } = await response.json();
             console.log("Response from api", message);
             
             if(message)
-                setMessages((prev) => [...prev, {role: 'agent', text: message}]);
+                setMessages((prev) => [...prev, {role: 'model', parts: [{text: message}] }]);
         }
     };
 
@@ -46,7 +46,7 @@ export default function ChatAIPage({ params: { class_id } }: { params: { class_i
                             {messages.map((msg, idx) => {
                                 return (
                                     <div key={idx} className={`flex py-2 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                        <div className={`p-2 max-w-4xl ${msg.role == 'user'? 'border rounded-lg' : ''} `}><Markdown>{msg.text}</Markdown></div>
+                                        <div className={`p-2 max-w-4xl ${msg.role == 'user'? 'border rounded-lg' : ''} `}><Markdown>{msg.parts[0].text}</Markdown></div>
                                     </div>
                                 )
                             })}
