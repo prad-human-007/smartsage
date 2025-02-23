@@ -1,6 +1,5 @@
 'use client'
 
-import { body } from 'framer-motion/client';
 import { useState } from 'react';
 import Markdown from 'react-markdown'
 

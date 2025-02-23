@@ -1,4 +1,5 @@
 export function ClassroomSidebar({class_id}: {class_id: string}) {
+    console.log(class_id)
     return (
         <div className="flex flex-col justify-between w-[15rem] border border-gray-500 rounded-xl p-4">
             <div>
