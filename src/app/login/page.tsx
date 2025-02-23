@@ -1,7 +1,8 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import Lottie from "lottie-react";
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 import educationAnimation from "@/animations/login-img.json"; // Add an appropriate Lottie animation
 import { Button } from "@/components/ui/button";
 
