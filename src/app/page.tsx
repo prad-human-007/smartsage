@@ -14,6 +14,9 @@ export default async function Home() {
       <SignInButton />
       <SignUpButton />
       <SignOutButton />
+      <a href="/student/dashboard"> Dashboard </a>
+      <a href="/student/classroom/class_1/chat">class_1</a>
+      <a href="/student/classroom/class_2/chat">class_2</a>
       </div>
       
     </div>  
