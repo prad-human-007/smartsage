@@ -1,6 +1,6 @@
 export function ClassroomSidebar({class_id}: {class_id: string}) {
     return (
-        <div className="flex flex-col justify-between w-[15rem] h-full border border-gray-500 rounded-xl p-4">
+        <div className="flex flex-col justify-between w-[15rem] border border-gray-500 rounded-xl p-4">
             <div>
                 <h2 className="text-2xl mb-4 "> Maths </h2>
                 <ul className="flex-grow overflow-y-auto">

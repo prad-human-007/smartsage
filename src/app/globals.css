@@ -72,7 +72,5 @@ body {
     border-color: var(--border); /* Use CSS variable instead of Tailwind class */
   }
   
-  body {
-   
-  }
+
 }

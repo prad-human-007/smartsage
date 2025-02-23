@@ -3,9 +3,9 @@ import { ReactNode } from "react";
 
 export default function Layout({children, params: {class_id}} : {children: ReactNode, params: {class_id: string}}) {
     return (
-        <div className="flex flex-row max-w-[120rem] w-full h-full items-center gap-3 ">
+        <div className="flex flex-row max-w-[120rem] w-full h-full  gap-3 ">
             <ClassroomSidebar class_id={class_id}/>
-            <div className="w-full h-full">
+            <div className="w-full  h-[calc(100vh-90px)]">
                 {children}
             </div>
         </div>
