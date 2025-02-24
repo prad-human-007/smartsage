@@ -12,10 +12,10 @@ import { motion } from "framer-motion";
 // Updated Bubble Config with More Teal & Faster Movement
 const bubbles = [
   { size: "w-96 h-96", color: "bg-teal-400/100", duration: 4, xRange: 1200, yRange: 800 },
-  { size: "w-80 h-80", color: "bg-teal-400/90", duration: 4.5, xRange: 900, yRange: 600 },
+  { size: "w-80 h-80", color: "bg-orange-400/90", duration: 4.5, xRange: 900, yRange: 600 },
   { size: "w-72 h-72", color: "bg-yellow-500/90", duration: 3.5, xRange: 1000, yRange: 700 },
   { size: "w-96 h-96", color: "bg-teal-500/100", duration: 3.8, xRange: 1100, yRange: 850 },
-  { size: "w-64 h-64", color: "bg-teal-300/90", duration: 5, xRange: 950, yRange: 750 },
+  { size: "w-64 h-64", color: "bg-orange-300/90", duration: 5, xRange: 950, yRange: 750 },
   { size: "w-60 h-60", color: "bg-yellow-400/90", duration: 3.2, xRange: 1050, yRange: 650 },
   { size: "w-96 h-96", color: "bg-teal-600/100", duration: 4.2, xRange: 1300, yRange: 900 },
 ];
