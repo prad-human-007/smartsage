@@ -16,7 +16,8 @@ export default function ClassroomDashboard() {
         classrooms.map(async (title) => {
           const id = uuidv4().slice(0, 6);
           const response = await fetch(
-            `https://source.unsplash.com/300x200/?classroom,education,school&sig=${id}`
+            `https://api.unsplash.com/photos/random?query=classroom&client_id=NEXT_PUBLIC_SPLASH_KEY`
+      );
           );
           return { title, id, image: response.url };
         })
