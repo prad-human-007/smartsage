@@ -1,6 +1,6 @@
 export function Navbar() {
     return (
-        <nav className="bg-orange-500 text-teal-100 p-4 shadow-md">
+        <nav className="w-full fixed top-0 left-0 bg-orange-500 text-teal-100 p-4 shadow-md">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold text-teal-200">Smart Sage</h1>
           <ul className="flex space-x-4">
