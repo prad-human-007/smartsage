@@ -3,8 +3,6 @@
 import { useState } from 'react';
 import { MessageList, Msg } from '@/components/chat/MessageList';
 
-
-
 export default function ChatAIPage({ params: { class_id } }: { params: { class_id: string } }) {
     const [messages, setMessages] = useState<Msg[]>([]);
     const [inputText, setInputText] = useState('');

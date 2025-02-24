@@ -8,7 +8,7 @@ export function ClassroomSidebar({class_id}: {class_id: string}) {
                 <li className="mb-2"><a href="/student/dashboard" className="text-xl mb-4">Home</a></li>
                     <li className="mb-2"><a href={`/student/classroom/${class_id}/chat`} className="text-xl mb-4">Ollie AI</a></li>
                     <li className="mb-2"><a href={`/student/classroom/${class_id}/notes`} className="text-xl mb-4">Notes</a></li>
-                    <li className="mb-2"><a href={`/student/classroom/${class_id}/notes`} className="text-xl mb-4">Group Chat</a></li>
+                    <li className="mb-2"><a href={`/student/classroom/${class_id}/class-chat`} className="text-xl mb-4">Group Chat</a></li>
                     <li className="mb-2"><a href={`/student/classroom/${class_id}/notes`} className="text-xl mb-4">Quiz</a></li>
                     {/* Add more links or content here */}
                 </ul>
