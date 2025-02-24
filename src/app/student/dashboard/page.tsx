@@ -20,7 +20,7 @@ export default function ClassroomDashboard() {
   useEffect(() => {
     async function fetchImages() {
       const classroomTitles = ["Math", "Science", "History", "English", "Physics"];
-
+  
       const fetchedClassrooms = await Promise.all(
         classroomTitles.map(async (title) => {
           const id = uuidv4().slice(0, 6);
@@ -28,21 +28,27 @@ export default function ClassroomDashboard() {
             const response = await fetch(
               `https://api.unsplash.com/photos/random?query=classroom&client_id=${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}`
             );
+  
+            if (!response.ok) {
+              console.error(`Unsplash API Error: ${response.statusText}`);
+              throw new Error("Unsplash API request failed.");
+            }
+  
             const data = await response.json();
             return { title, id, image: data?.urls?.small || "/fallback-image.jpg" };
           } catch (error) {
             console.error("Error fetching Unsplash image:", error);
-            return { title, id, image: "/fallback-image.jpg" };
+            return { title, id, image: "/fallback-image.jpg" }; // Use fallback image
           }
         })
       );
-
+  
       setClassList(fetchedClassrooms);
     }
-
+  
     fetchImages();
   }, []);
-
+  
   const handleCardClick = (class_id) => {
     router.push(`/student/classroom/${class_id}/chat`);
   };
