@@ -4,7 +4,7 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Playwrite+IT+Moderna:wght@400;700&display=swap");
 @import url('https://fonts.googleapis.com/css2?family=Freckle+Face&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
 
 body {
@@ -56,6 +56,11 @@ body {
   .font-pacifico {
     font-family: "Pacifico", cursive ;
   }
+
+
+.readex-pro {
+  font-family: "Readex Pro", sans-serif;
+}
 
   .dark {
     --background: 0 0% 3.9%;

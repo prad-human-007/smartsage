@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Pacifico , Freckle_Face , Ribeye_Marrow} from "next/font/google";
+import { Pacifico , Freckle_Face , Ribeye_Marrow , Readex_Pro} from "next/font/google";
 import localFont from "next/font/local";
 import Navbar from "@/components/student/Navbar";
 
@@ -18,6 +18,12 @@ const freckle_face = Freckle_Face({
 })
 
 const ribeye_marrow = Ribeye_Marrow({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+})
+
+const readex_pro = Readex_Pro ({
   weight: "400",
   subsets: ["latin"],
   display: "swap",
