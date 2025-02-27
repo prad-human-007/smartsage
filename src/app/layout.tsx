@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Pacifico , Freckle_Face , Ribeye_Marrow} from "next/font/google";
 import localFont from "next/font/local";
+import Navbar from "@/components/student/Navbar";
 
 /* ✅ Load Google Pacifico font correctly */
 const pacifico = Pacifico({
@@ -46,6 +47,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${ribeye_marrow.className} ${geistMono.variable} antialiased`}>
+        <Navbar/>
         {children}
       </body>
     </html>
