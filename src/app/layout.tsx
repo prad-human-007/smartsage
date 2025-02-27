@@ -1,12 +1,34 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
+import { Pacifico , Freckle_Face , Ribeye_Marrow} from "next/font/google";
+import localFont from "next/font/local";
 
+/* ✅ Load Google Pacifico font correctly */
+const pacifico = Pacifico({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const freckle_face = Freckle_Face({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+})
+
+const ribeye_marrow = Ribeye_Marrow({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+})
+
+/* ✅ Load Local Fonts */
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
   weight: "100 900",
 });
+
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
@@ -20,14 +42,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${ribeye_marrow.className} ${geistMono.variable} antialiased`}>
         {children}
       </body>
     </html>

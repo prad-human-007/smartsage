@@ -2,9 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("https://fonts.googleapis.com/css2?family=Playwrite+IT+Moderna:wght@400;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Freckle+Face&display=swap');
+
+@import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Frekle_Face" ,"Pacifico", cursive;
 }
+
+/* ✅ Ensure Tailwind utility for Pacifico */
+.font-pacifico {
+  font-family: "Pacifico" , cursive;
+}
+
 
 @layer utilities {
   .text-balance {
@@ -41,6 +52,11 @@ body {
     --radius: 0.5rem;
   }
 
+  /* ✅ Ensure Pacifico works inside Tailwind */
+  .font-pacifico {
+    font-family: "Pacifico", cursive ;
+  }
+
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -69,8 +85,6 @@ body {
   }
 
   * {
-    border-color: var(--border); /* Use CSS variable instead of Tailwind class */
+    border-color: var(--border);
   }
-  
-
 }
