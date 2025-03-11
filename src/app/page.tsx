@@ -1,10 +1,11 @@
 "use client";
-
+import { useRouter } from "next/navigation"; 
 import React from "react";
 import Lottie from "lottie-react";
 import animationData from "@/animations/login-img.json"; // Ensure the correct file path
 
 const CustomButton = ({ text, onClick }: { text: string; onClick: () => void }) => {
+ 
   return (
     <button
       onClick={onClick}
@@ -16,6 +17,9 @@ const CustomButton = ({ text, onClick }: { text: string; onClick: () => void }) 
 };
 
 export default function LandingPage() {
+
+  const router = useRouter();
+  
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
       <h1 className="text-7xl text-gray-800 mb-10 text-center">Welcome to Smart Sage</h1>
@@ -38,8 +42,8 @@ export default function LandingPage() {
             <div className="mt-8 text-center">
               <h2 className="text-2xl text-gray-800 mb-4">Try it today!</h2>
               <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                <CustomButton text="Login as Student" onClick={() => alert("Student Login")} />
-                <CustomButton text="Login as Teacher" onClick={() => alert("Teacher Login")} />
+                <CustomButton text="Login as Student" onClick={() => router.push("/login")} />
+                <CustomButton text="Login as Teacher" onClick={() => router.push("/login")} />
               </div>
             </div>
           </div>

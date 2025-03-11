@@ -3,19 +3,13 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
-import { motion } from "framer-motion"; // Import Framer Motion for animations
-
-const bubbles = [
-  { size: "w-96 h-96", color: "bg-yellow-500/90", duration: 12, xRange: 150, yRange: 100 },
-  { size: "w-80 h-80", color: "bg-teal-400/90", duration: 15, xRange: 120, yRange: 80 },
-  { size: "w-96 h-96", color: "bg-yellow-500/90", duration: 14, xRange: 180, yRange: 110 },
-  { size: "w-64 h-64", color: "bg-teal-300/90", duration: 16, xRange: 140, yRange: 90 },
-  { size: "w-96 h-96", color: "bg-teal-600/100", duration: 13, xRange: 160, yRange: 120 },
-];
+import { motion } from "framer-motion";
+import Navbar from "@/components/student/Navbar";
 
 export default function ClassroomDashboard() {
   const router = useRouter();
-  const [classList, setClassList] = useState([]);
+  const [classList, setClassList] = useState<{ title: string; id: string; image: string }[]>([]);
+
 
   useEffect(() => {
     async function fetchImages() {
@@ -49,49 +43,49 @@ export default function ClassroomDashboard() {
     fetchImages();
   }, []);
   
-  const handleCardClick = (class_id) => {
+  const handleCardClick = (class_id: string) => {
     router.push(`/student/classroom/${class_id}/chat`);
   };
 
   return (
-    <div className="relative flex flex-col items-center min-h-screen bg-beige overflow-hidden">
+    <div className="relative flex flex-col items-center min-h-screen bg-gray-100 overflow-hidden p-6">
+      
       {/* Animated Background Bubbles */}
-      {bubbles.map((bubble, index) => (
-        <motion.div
-          key={index}
-          className={`absolute ${bubble.size} ${bubble.color} rounded-full blur-3xl opacity-70`}
-          animate={{
-            x: [0, bubble.xRange, -bubble.xRange, 0],
-            y: [0, -bubble.yRange, bubble.yRange, 0],
-          }}
-          transition={{
-            duration: bubble.duration,
-            repeat: Infinity,
-            repeatType: "mirror",
-            ease: "linear",
-          }}
-          style={{
-            top: `${Math.random() * 80}%`,
-            left: `${Math.random() * 80}%`,
-          }}
-        />
-      ))}
+      
+      {/* Title */}
+      <h1 className="text-5xl font-semibold text-gray-800 mb-10 text-center z-10">Classroom Dashboard</h1>
 
-      <h1 className="text-3xl font-bold mt-10 mb-6 text-center z-10">Classroom Dashboard</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 z-10">
-        {classList.map(({ title, image, id }) => (
-          <div
-            key={id}
-            className="bg-white shadow-lg rounded-xl overflow-hidden cursor-pointer hover:shadow-2xl transition duration-300"
-            onClick={() => handleCardClick(id)}
-          >
-            <img src={image} alt={title} className="w-full h-40 object-cover" />
-            <div className="p-4">
-              <h2 className="text-xl font-semibold">{title}</h2>
-              <p className="text-gray-500 text-sm">ID: {id}</p>
+      {/* Dashboard Card Container */}
+      <div className="bg-[#FFDAB9] p-10 rounded-3xl shadow-xl flex flex-col w-[95%] mx-auto">
+        
+        {/* Inner Teal Section */}
+        <div className="bg-teal-500 p-8 rounded-2xl shadow-lg w-full">
+          
+          {/* White Card Inside Teal Card */}
+          <div className="bg-white p-8 rounded-xl shadow-md">
+            <h2 className="text-3xl font-semibold text-center text-teal-600 mb-6">Your Classrooms</h2>
+
+            {/* Grid Layout */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {classList.map(({ title, image, id }) => (
+                <div
+                  key={id}
+                  className="bg-white rounded-xl shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition duration-300 transform hover:-translate-y-1"
+                  onClick={() => handleCardClick(id)}
+                >
+                  <img src={image} alt={title} className="w-full h-40 object-cover" />
+                  <div className="p-4">
+                    <h3 className="text-xl font-semibold text-gray-800">{title}</h3>
+                    <p className="text-gray-500 text-sm">ID: {id}</p>
+                  </div>
+                </div>
+              ))}
             </div>
+
           </div>
-        ))}
+
+        </div>
+
       </div>
     </div>
   );

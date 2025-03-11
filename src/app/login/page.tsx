@@ -2,47 +2,99 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
-import educationAnimation from "@/animations/login-img.json"; // Add an appropriate Lottie animation
-import { Button } from "@/components/ui/button";
+import educationAnimation from "@/animations/login-img.json"; // Ensure the correct file path
+
+const CustomButton = ({ text, onClick }: { text: string; onClick: () => void }) => {
+  return (
+    <button
+      onClick={onClick}
+      className="px-6 py-3 bg-yellow-400 text-gray-900 font-semibold rounded-full text-lg shadow-md hover:bg-yellow-500 transition-all w-full"
+    >
+      {text}
+    </button>
+  );
+};
 
 export default function LoginPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = () => {
+    console.log("Logging in with:", email, password);
+    // Add authentication logic here
+  };
+
+  const handleGoogleLogin = () => {
+    console.log("Google Sign-In triggered");
+    // Add Google authentication logic here
+  };
+
   return (
-    <div className="flex h-screen w-full">
-      {/* Left: Animated Illustration */}
-      <div className="hidden lg:flex w-1/2 bg-beige justify-center items-center p-8">
-        <Lottie animationData={educationAnimation} className="w-3/4 h-auto" />
-      </div>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
+      <h1 className="text-7xl text-gray-800 mb-10 text-center">Welcome to Smart Sage</h1>
 
-      {/* Right: Login Options */}
-      <div className="flex flex-col justify-center items-center w-full lg:w-1/2 p-8 bg-white text-teal-600">
-        <h1 className="text-4xl font-serif font-bold text-teal-700">
-          Welcome to Smart Sage!
-        </h1>
-        <p className="mt-2 text-lg text-center text-teal-600">
-          Where your classroom experience meets AI
-        </p>
-
-        <div className="mt-6 flex flex-col gap-4 w-full max-w-sm">
-          <Link href="/student/login">
-            <Button className="w-full !bg-yellow-500 hover:!bg-yellow-600 text-black">
-              Login as Student
-            </Button>
-          </Link>
-
-          <Link href="/teacher/login">
-            <Button className="w-full !bg-yellow-500 hover:!bg-yellow-600 text-black">
-              Login as Teacher
-            </Button>
-          </Link>
+      {/* Peach Card Covering Almost Entire Width */}
+      <div className="bg-[#FFDAB9] p-10 rounded-3xl shadow-xl flex flex-col md:flex-row items-center gap-8 w-[95%] mx-auto">
+        
+        {/* Left Side: Lottie Animation */}
+        <div className="w-full md:w-1/2">
+          <Lottie animationData={educationAnimation} loop={true} className="w-full h-auto" />
         </div>
 
-        <p className="mt-4 text-sm text-teal-600">
-          Don&apos;t have an account?{" "}
-          <Link href="/signup" className="text-teal-700 underline">
-            Sign up
-          </Link>
-        </p>
+        {/* Right Side: Login Section */}
+        <div className="bg-teal-500 p-6 rounded-2xl shadow-lg w-full md:w-1/2">
+          
+          {/* White Card Inside Teal Card */}
+          <div className="bg-white p-8 rounded-xl shadow-md text-teal-600 text-lg">
+            <h2 className="text-3xl font-semibold mb-4 text-center">Login to Your Account</h2>
+            <p className="text-lg text-teal-700 text-center">
+              Where your classroom experience meets AI.
+            </p>
+
+            {/* Email & Password Input Fields */}
+            <div className="mt-6 flex flex-col gap-4 w-full max-w-sm mx-auto">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="px-4 py-3 border rounded-lg w-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400"
+              />
+              <input
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="px-4 py-3 border rounded-lg w-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400"
+              />
+
+              {/* Login Button */}
+              <CustomButton text="Login" onClick={handleLogin} />
+
+              {/* Google Sign-In Button */}
+              <button
+                onClick={handleGoogleLogin}
+                className="px-6 py-3 bg-red-500 text-white font-semibold rounded-full text-lg shadow-md hover:bg-red-600 transition-all w-full flex items-center justify-center gap-2"
+              >
+                
+                Sign in with Google
+              </button>
+            </div>
+
+            {/* Sign Up Option */}
+            <p className="mt-6 text-sm text-teal-600 text-center">
+              Don&apos;t have an account?{" "}
+              <Link href="/signup" className="text-teal-700 underline font-medium">
+                Sign up
+              </Link>
+            </p>
+          </div>
+
+        </div>
       </div>
     </div>
   );
