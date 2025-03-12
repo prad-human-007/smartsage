@@ -1,127 +1,113 @@
 "use client";
 
+import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function SignUp() {
-  const router = useRouter();
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
+import educationAnimation from "@/animations/login-img.json"; // Ensure correct path
 
+const CustomButton = ({ text, onClick }: { text: string; onClick: () => void }) => {
+  return (
+    <button
+      onClick={onClick}
+      className="px-6 py-3 bg-yellow-400 text-gray-900 font-semibold rounded-full text-lg shadow-md hover:bg-yellow-500 transition-all w-full"
+    >
+      {text}
+    </button>
+  );
+};
+
+export default function SignupPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
+  const handleSignup = () => {
+    if (password !== confirmPassword) {
+      setError("Passwords do not match!");
       return;
     }
-    setError("");
-    console.log("Form submitted", formData);
-    router.push("/dashboard"); // Redirect after successful signup
+    console.log("Signing up with:", email, password);
+    // Add sign-up logic here
   };
 
-  const handleGoogleSignIn = () => {
-    console.log("Signing in with Google...");
+  const handleGoogleSignup = () => {
+    console.log("Google Sign-Up triggered");
+    // Add Google authentication logic here
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-white">
-      <div className="w-full max-w-md p-8 shadow-lg rounded-xl bg-gray-100">
-        <h2 className="text-3xl font-semibold text-center mb-4 text-teal-700">
-          Create an Account
-        </h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Full Name
-            </label>
-            <input
-              type="text"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-teal-500"
-              placeholder="John Doe"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-teal-500"
-              placeholder="you@example.com"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-teal-500"
-              placeholder="Your password"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-teal-500"
-              placeholder="Confirm your password"
-            />
-          </div>
-
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-
-          <button
-            type="submit"
-            className="w-full py-2 text-white bg-yellow-500 rounded-md hover:bg-yellow-600 transition"
-          >
-            Sign Up
-          </button>
-        </form>
-
-        <div className="mt-4 text-center">
-          <button
-            onClick={handleGoogleSignIn}
-            className="w-full py-2 border border-gray-400 rounded-md flex items-center justify-center hover:bg-gray-200 transition"
-          >
-            Sign Up with Google
-          </button>
+    <div className="h-screen flex items-center justify-center bg-gray-100 p-6">
+      <div className="bg-[#FFDAB9] p-10 rounded-3xl shadow-xl flex flex-col md:flex-row items-center gap-8 w-[95%] max-w-5xl mx-auto">
+        
+        {/* Left Side: Lottie Animation */}
+        <div className="w-full md:w-1/2 flex justify-center">
+          <Lottie animationData={educationAnimation} loop={true} className="w-full max-w-xs" />
         </div>
 
-        <p className="text-center text-sm text-gray-600 mt-4">
-          Already have an account?{" "}
-          <a href="/login" className="text-teal-700 underline">
-            Log in
-          </a>
-        </p>
+        {/* Right Side: Signup Section */}
+        <div className="bg-teal-500 p-6 rounded-2xl shadow-lg w-full md:w-1/2">
+          
+          {/* White Card Inside Teal Card */}
+          <div className="bg-white p-8 rounded-xl shadow-md text-teal-600 text-lg">
+            <h2 className="text-3xl font-semibold mb-4 text-center">Create an Account</h2>
+            <p className="text-lg text-teal-700 text-center">
+              Unlock the power of AI in learning.
+            </p>
+
+            {/* Input Fields */}
+            <div className="mt-6 flex flex-col gap-4 w-full max-w-sm mx-auto">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="px-4 py-3 border rounded-lg w-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400"
+              />
+              <input
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="px-4 py-3 border rounded-lg w-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400"
+              />
+              <input
+                type="password"
+                placeholder="Confirm your password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="px-4 py-3 border rounded-lg w-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400"
+              />
+              
+              {/* Error Message */}
+              {error && <p className="text-red-600 text-sm">{error}</p>}
+
+              {/* Signup Button */}
+              <CustomButton text="Sign Up" onClick={handleSignup} />
+
+              {/* Google Sign-Up Button */}
+              <button
+                onClick={handleGoogleSignup}
+                className="px-6 py-3 bg-red-500 text-white font-semibold rounded-full text-lg shadow-md hover:bg-red-600 transition-all w-full flex items-center justify-center gap-2"
+              >
+                Sign up with Google
+              </button>
+            </div>
+
+            {/* Login Option */}
+            <p className="mt-6 text-sm text-teal-600 text-center">
+              Already have an account?{" "}
+              <Link href="/login" className="text-teal-700 underline font-medium">
+                Log in
+              </Link>
+            </p>
+          </div>
+
+        </div>
       </div>
     </div>
   );
