@@ -10,15 +10,13 @@ export default function ClassroomDashboard() {
 
   useEffect(() => {
     const classroomTitles = ["Math", "Science", "History", "English", "Physics"];
-    const fallbackImage = "/fallback-image.jpg"; // Use a static fallback image
-    
-    const generatedClassrooms = classroomTitles.map((title) => ({
-      title,
-      id: uuidv4().slice(0, 6),
-      image: fallbackImage,
-    }));
 
-    setClassList(generatedClassrooms);
+    const fetchedClassrooms = classroomTitles.map((title) => {
+      const id = uuidv4().slice(0, 6);
+      return { title, id, image: "/error.jpg" };
+    });
+
+    setClassList(fetchedClassrooms);
   }, []);
 
   const handleCardClick = (class_id: string) => {
@@ -27,6 +25,7 @@ export default function ClassroomDashboard() {
 
   return (
     <div className="relative flex flex-col items-center min-h-screen bg-gray-100 overflow-hidden p-6">
+      
       {/* Title */}
       <h1 className="text-5xl font-semibold text-gray-800 mb-10 text-center z-10">Classroom Dashboard</h1>
 
@@ -58,7 +57,9 @@ export default function ClassroomDashboard() {
             </div>
 
           </div>
+
         </div>
+
       </div>
     </div>
   );
