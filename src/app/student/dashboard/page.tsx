@@ -3,55 +3,30 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
-import { motion } from "framer-motion";
-import Navbar from "@/components/student/Navbar";
 
 export default function ClassroomDashboard() {
   const router = useRouter();
   const [classList, setClassList] = useState<{ title: string; id: string; image: string }[]>([]);
 
-
   useEffect(() => {
-    async function fetchImages() {
-      const classroomTitles = ["Math", "Science", "History", "English", "Physics"];
-  
-      const fetchedClassrooms = await Promise.all(
-        classroomTitles.map(async (title) => {
-          const id = uuidv4().slice(0, 6);
-          try {
-            const response = await fetch(
-              `https://api.unsplash.com/photos/random?query=classroom&client_id=${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}`
-            );
-  
-            if (!response.ok) {
-              console.error(`Unsplash API Error: ${response.statusText}`);
-              throw new Error("Unsplash API request failed.");
-            }
-  
-            const data = await response.json();
-            return { title, id, image: data?.urls?.small || "/fallback-image.jpg" };
-          } catch (error) {
-            console.error("Error fetching Unsplash image:", error);
-            return { title, id, image: "/fallback-image.jpg" }; // Use fallback image
-          }
-        })
-      );
-  
-      setClassList(fetchedClassrooms);
-    }
-  
-    fetchImages();
+    const classroomTitles = ["Math", "Science", "History", "English", "Physics"];
+    const fallbackImage = "/fallback-image.jpg"; // Use a static fallback image
+    
+    const generatedClassrooms = classroomTitles.map((title) => ({
+      title,
+      id: uuidv4().slice(0, 6),
+      image: fallbackImage,
+    }));
+
+    setClassList(generatedClassrooms);
   }, []);
-  
+
   const handleCardClick = (class_id: string) => {
     router.push(`/student/classroom/${class_id}/chat`);
   };
 
   return (
     <div className="relative flex flex-col items-center min-h-screen bg-gray-100 overflow-hidden p-6">
-      
-      {/* Animated Background Bubbles */}
-      
       {/* Title */}
       <h1 className="text-5xl font-semibold text-gray-800 mb-10 text-center z-10">Classroom Dashboard</h1>
 
@@ -83,9 +58,7 @@ export default function ClassroomDashboard() {
             </div>
 
           </div>
-
         </div>
-
       </div>
     </div>
   );
