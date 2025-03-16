@@ -3,55 +3,125 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function LoginPage() {
+export default function SignUp() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [error, setError] = useState("");
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle authentication logic here
-    console.log("Logging in with:", { email, password });
-    router.push("/dashboard"); // Redirect after successful login
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+    setError("");
+    console.log("Form submitted", formData);
+    router.push("/dashboard"); // Redirect after successful signup
+  };
+
+  const handleGoogleSignIn = () => {
+    console.log("Signing in with Google...");
   };
 
   return (
-    <div className="flex h-screen w-full justify-center items-center bg-beige">
-      <div className="flex flex-col w-full max-w-md p-8 bg-white shadow-lg rounded-lg">
-        <h1 className="text-2xl font-bold text-teal-700 text-center">Sign In</h1>
-        <p className="text-sm text-teal-600 text-center mb-4">
-          Don&apos;t have an account? <a href="/signup" className="underline text-teal-700">Sign up</a>
-        </p>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <div className="flex justify-center items-center h-screen bg-white">
+      <div className="w-full max-w-md p-8 shadow-lg rounded-xl bg-gray-100">
+        <h2 className="text-3xl font-semibold text-center mb-4 text-teal-700">
+          Create an Account
+        </h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-teal-700">Email</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Full Name
+            </label>
+            <input
+              type="text"
+              name="fullName"
+              value={formData.fullName}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-teal-500"
+              placeholder="John Doe"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Email
+            </label>
             <input
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               required
-              className="w-full p-2 border rounded"
+              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-teal-500"
               placeholder="you@example.com"
             />
           </div>
           <div>
-            <label className="block text-teal-700">Password</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
               required
-              className="w-full p-2 border rounded"
+              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-teal-500"
               placeholder="Your password"
             />
           </div>
-          <button type="submit" className="w-full bg-yellow-500 text-black py-2 rounded hover:bg-yellow-600">
-            Sign in
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-teal-500"
+              placeholder="Confirm your password"
+            />
+          </div>
+
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+
+          <button
+            type="submit"
+            className="w-full py-2 text-white bg-yellow-500 rounded-md hover:bg-yellow-600 transition"
+          >
+            Sign Up
           </button>
         </form>
-        <button className="w-full mt-4 bg-yellow-500 text-black py-2 rounded hover:bg-yellow-600">
-          Sign in with Google
-        </button>
+
+        <div className="mt-4 text-center">
+          <button
+            onClick={handleGoogleSignIn}
+            className="w-full py-2 border border-gray-400 rounded-md flex items-center justify-center hover:bg-gray-200 transition"
+          >
+            Sign Up with Google
+          </button>
+        </div>
+
+        <p className="text-center text-sm text-gray-600 mt-4">
+          Already have an account?{" "}
+          <a href="/login" className="text-teal-700 underline">
+            Log in
+          </a>
+        </p>
       </div>
     </div>
   );
