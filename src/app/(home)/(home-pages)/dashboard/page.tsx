@@ -20,17 +20,14 @@ export default function ClassroomDashboard() {
   }, []);
 
   const handleCardClick = (class_id: string) => {
-    router.push(`/student/classroom/${class_id}/chat`);
+    router.push(`/classroom/${class_id}/chat`);
   };
 
   return (
-    <div className=" flex flex-col items-center min-h-screen bg-gray-100 overflow-hidden p-6">
+    <div className=" flex flex-col items-center min-h-screen overflow-hidden">
       
-      {/* Title */}
-      <h1 className="text-5xl font-semibold text-gray-800 mb-10 text-center z-10">Classroom Dashboard</h1>
-
       {/* Dashboard Card Container */}
-      <div className="bg-[#FFDAB9] p-10 rounded-3xl shadow-xl flex flex-col w-[95%] mx-auto">
+      <div className="bg-[#FFDAB9] p-10 rounded-3xl shadow-xl flex flex-col w-full mx-auto">
         
         {/* Inner Teal Section */}
         <div className="bg-teal-500 p-8 rounded-2xl shadow-lg w-full">

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Pacifico , Freckle_Face , Ribeye_Marrow , Readex_Pro, Dancing_Script, Noto_Serif, Quicksand, Lora} from "next/font/google";
 import localFont from "next/font/local";
-import Navbar from "@/components/student/Navbar";
+import Navbar from "@/components/home/Navbar";
 
 /* ✅ Load Google Pacifico font correctly */
 const pacifico = Pacifico({
@@ -63,7 +63,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${quicksand.className} antialiased`}>
+      <body className={`${quicksand.className} antialiased p-3`}>
         <Navbar/>
         {children}
       </body>

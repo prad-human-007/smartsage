@@ -1,4 +1,4 @@
-import { DashboardSidebar } from "@/components/student/sidebar/DashboardSidebar";
+import { DashboardSidebar } from "@/components/home/sidebar/DashboardSidebar";
 import { ReactNode } from "react";
 
 export default function Layout({children } : {children: ReactNode}) {
