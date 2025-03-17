@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Pacifico , Freckle_Face , Ribeye_Marrow , Readex_Pro} from "next/font/google";
+import { Pacifico , Freckle_Face , Ribeye_Marrow , Readex_Pro, Dancing_Script, Noto_Serif, Quicksand, Lora} from "next/font/google";
 import localFont from "next/font/local";
 import Navbar from "@/components/student/Navbar";
 
@@ -28,19 +28,30 @@ const readex_pro = Readex_Pro ({
   subsets: ["latin"],
   display: "swap",
 })
+const dancing_script = Dancing_Script ({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+})
 
-/* ✅ Load Local Fonts */
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
+const noto_serif = Noto_Serif ({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+})
 
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+const lora = Lora ({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+})
+
+const quicksand = Quicksand ({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+})
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -52,7 +63,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${ribeye_marrow.className} ${geistMono.variable} antialiased`}>
+      <body className={`${quicksand.className} antialiased`}>
         <Navbar/>
         {children}
       </body>

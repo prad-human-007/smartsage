@@ -24,7 +24,7 @@ export default function ClassroomDashboard() {
   };
 
   return (
-    <div className="relative flex flex-col items-center min-h-screen bg-gray-100 overflow-hidden p-6">
+    <div className=" flex flex-col items-center min-h-screen bg-gray-100 overflow-hidden p-6">
       
       {/* Title */}
       <h1 className="text-5xl font-semibold text-gray-800 mb-10 text-center z-10">Classroom Dashboard</h1>

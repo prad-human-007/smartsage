@@ -1,14 +1,10 @@
-export function DashboardSidebar({ isOpen, setIsOpen }) {
+'use client'
+export function DashboardSidebar({ isOpen=true, setIsOpen }: { isOpen: boolean; setIsOpen?: (isOpen: boolean) => void }) {
     return (
-        <div className={`fixed top-0 left-0 h-full w-[15rem] bg-teal-700 text-white p-4 shadow-lg transform transition-transform duration-300 ${
+        <div className={` rounded-xl top-0 left-0 h-full w-[15rem] bg-teal-700 text-white p-4 shadow-lg transform transition-transform duration-300 ${
             isOpen ? "translate-x-0" : "-translate-x-full"
         }`}>
-            <button 
-                className="text-white text-2xl mb-4 focus:outline-none" 
-                onClick={() => setIsOpen(false)}
-            >
-                ✕
-            </button>
+
             <h2 className="text-2xl mb-4">Maths</h2>
             <ul className="flex-grow overflow-y-auto">
                 <li className="mb-2"><a href="/student/dashboard" className="text-xl">Home</a></li>

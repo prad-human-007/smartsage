@@ -56,7 +56,7 @@ const config: Config = {
         }
       },
       fontFamily: {
-        playwrite: ["Freckle Face" ,"Pacifico", "sans-serif"], // ✅ Corrected font name
+        playwrite: ["sans-serif"], // ✅ Corrected font name
       },
       borderRadius: {
         lg: 'var(--radius)',
