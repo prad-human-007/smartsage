@@ -63,6 +63,7 @@ export function CreateClass() {
 
     if (response.ok) {
       setOpen(false)
+      window.location.reload()
     }
     else {
       alert("Failed to create class}")  

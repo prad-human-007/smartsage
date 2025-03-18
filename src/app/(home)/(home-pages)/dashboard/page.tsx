@@ -63,11 +63,11 @@ export default function ClassroomDashboard() {
         <div className="bg-teal-500 p-8 rounded-2xl shadow-lg w-full">
           
           {/* White Card Inside Teal Card */}
-          <div className="bg-white p-8 rounded-xl shadow-md">
+          <div className="bg-white p-8 rounded-xl shadow-md overflow-y-auto">
             <h2 className="text-3xl font-semibold text-center text-teal-600 mb-6">Your Classrooms</h2>
 
             {/* Grid Layout */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ">
               {classList.map(({ title, image, id }) => (
                 <div
                   key={id}

@@ -58,6 +58,7 @@ export function JoinClass() {
     const data = await response.json();
     if (response.ok) {
       setOpen(false)
+      window.location.reload()
     }
     else {
       console.log(data)
