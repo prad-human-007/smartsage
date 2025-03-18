@@ -3,6 +3,7 @@ import "./globals.css";
 import { Pacifico , Freckle_Face , Ribeye_Marrow , Readex_Pro, Dancing_Script, Noto_Serif, Quicksand, Lora} from "next/font/google";
 import localFont from "next/font/local";
 import Navbar from "@/components/home/Navbar";
+import { AuthProvider } from "@/utils/supabase/auth-context";
 
 /* ✅ Load Google Pacifico font correctly */
 const pacifico = Pacifico({
@@ -64,8 +65,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${quicksand.className} antialiased `}>
+        <AuthProvider>
         <div className="px-3"><Navbar/></div>
         {children}
+        </AuthProvider>
       </body>
     </html>
   );

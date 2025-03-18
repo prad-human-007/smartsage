@@ -3,21 +3,51 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
+import { useAuth } from "@/utils/supabase/auth-context";
+import { createClient } from "@/utils/supabase/client";
 
 export default function ClassroomDashboard() {
   const router = useRouter();
   const [classList, setClassList] = useState<{ title: string; id: string; image: string }[]>([]);
+  const {user, token, isAuthenticated, loading} = useAuth()
+
 
   useEffect(() => {
-    const classroomTitles = ["Math", "Science", "History", "English", "Physics"];
+    if(loading || !user) return
 
-    const fetchedClassrooms = classroomTitles.map((title) => {
-      const id = uuidv4().slice(0, 6);
-      return { title, id, image: "/error.jpg" };
-    });
+    console.log("User", user);
 
-    setClassList(fetchedClassrooms);
-  }, []);
+    const fetchUserClasses = async () => {
+      const supabase = createClient();
+  
+      const { data, error } = await supabase
+        .from("class_members")
+        .select("class_id, classrooms(name)")
+        .eq("member_id", user.id);
+  
+      if (error) {
+        console.error("Error fetching classes:", error);
+        return;
+      }
+      
+      console.log("Fetched Classes", data);
+      const fetchedClassrooms = data.map((entry) =>{
+        return { title: entry.classrooms.name, id: entry.class_id, image: "/error.jpg" };
+      });
+  
+      setClassList(fetchedClassrooms);
+    };
+    fetchUserClasses();
+    
+    // const classroomTitles = ["Math", "Science", "History", "English", "Physics"];
+    // const fetchedClassrooms = classroomTitles.map((title) => {
+    //   const id = uuidv4().slice(0, 6);
+    //   return { title, id, image: "/error.jpg" };
+    // });
+    // setClassList(fetchedClassrooms);
+
+
+  }, [loading, user]);
 
   const handleCardClick = (class_id: string) => {
     router.push(`/classroom/${class_id}/chat`);

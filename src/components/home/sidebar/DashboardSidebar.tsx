@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { CreateClass } from "../CreateClassButton";
+import { JoinClass } from "../JoinClassButton";
 
 export function DashboardSidebar() {
     return (
@@ -13,8 +14,12 @@ export function DashboardSidebar() {
                 <li className="mb-2"><a href="/calender" className="text-xl">Calendar</a></li>
                 <li className="mb-2"><a href="/analysis" className="text-xl">Analysis</a></li>
             </ul>
-            <CreateClass />
             <a href="/settings" className="text-xl">Settings</a>
+            <div className="flex flex-col gap-1 mt-2">
+                <CreateClass />
+                <JoinClass />
+            </div>
+            
         </div>
     );
 }

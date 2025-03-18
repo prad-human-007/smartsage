@@ -16,16 +16,14 @@ import { useEffect, useState } from "react"
 import { User } from "@supabase/supabase-js"
 import { createClient } from "@/utils/supabase/client"
 import { useRouter } from "next/navigation"
-
-export function CreateClass() {
+export function JoinClass() {
 
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [ user, setUser ] = useState<User | null>(null)
   const [ token, setToken ] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
+  const [class_id, setClassId] = useState('')
   // supabase user initialization
   useEffect(() => {
       const supabase = createClient();
@@ -41,10 +39,10 @@ export function CreateClass() {
       
   }, []);
 
-  const createClass = async () => {
+  const joinClass = async () => {
     if(!token) {alert("You are not authenticated"); return}
-    if(!name || !description) {alert("Please fill in all fields"); return}
-    const response = await fetch('/api/create-class',
+    if(!class_id) {alert("Please fill in all fields"); return}
+    const response = await fetch('/api/join-class',
       {
         method: 'POST',
         headers: {
@@ -52,60 +50,47 @@ export function CreateClass() {
           'Authorization': `Bearer ${token}`
         }, 
         body: JSON.stringify({
-          name: name,
-          description: description
+          class_id: class_id,
         })
       }
     )
-    const data = await response.json()
-    console.log("Class Created", data)
-
-
+    
+    const data = await response.json();
     if (response.ok) {
       setOpen(false)
     }
     else {
-      alert("Failed to create class}")  
+      console.log(data)
+      alert(data)  
     }
   }
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant={"ghost"} className="text-lg">Create Classroom</Button>
+        <Button variant={"ghost"} className="text-lg">Join Classroom</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader className="rounded-xl">
-          <DialogTitle>Create Classroom</DialogTitle>
+          <DialogTitle>Join Classroom</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
+            Enter the Id of the classroom you want to join
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
-              Class Name
+              Class Id
             </Label>
             <Input 
             id="name"
-            placeholder="Physics" 
+            placeholder="I45GF3" 
             className="col-span-3"
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => setClassId(e.target.value)}
              />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Description
-            </Label>
-            <Input 
-            id="username" 
-            placeholder="Physics Class for 8th grade" 
-            className="col-span-3" 
-            onChange={(e) => setDescription(e.target.value)}
-            />
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={createClass} type="submit">Create Class</Button>
+          <Button onClick={joinClass} type="submit">Join Class</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

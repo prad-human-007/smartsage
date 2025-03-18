@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     const {name, description } = await request.json();
     console.log("class name:", name, "description:", description, "user:", user.id);
     
-    const code = uuidv4().slice(0, 5);
+    const code = uuidv4().slice(0, 6);
     const {data, error } = await supabase.from('classrooms').insert([{
         name: name,
         description: description,
@@ -44,5 +44,16 @@ export async function POST(request: Request) {
         console.error("Failed to create classroom", error);
         return NextResponse.json("Failed to create classroom", { status: 500 });
     }
-    return NextResponse.json({message: 'success'}, { status: 200 });
+
+    const response = await supabase.from('class_members').insert([{
+        class_id: code,
+        member_id: user.id
+    }])
+
+    if(response.error) {
+        console.error("Failed to create classroom", response.error);
+        return NextResponse.json("Failed to create classroom", { status: 500 });
+    }
+
+    return NextResponse.json({class_id: ''}, { status: 200 });
 }
