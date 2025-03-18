@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 
-
-
 export async function POST(request: Request) {
     const {chat_history, input} = await request.json();
     console.log("chat history:", chat_history, "input:", input);
