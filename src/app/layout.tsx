@@ -63,8 +63,8 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${quicksand.className} antialiased p-3`}>
-        <Navbar/>
+      <body className={`${quicksand.className} antialiased `}>
+        <div className="px-3"><Navbar/></div>
         {children}
       </body>
     </html>
