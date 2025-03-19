@@ -10,54 +10,143 @@ export const signUpAction = async (formData: FormData) => {
   const supabase = await createClient();
 
   if (!email || !password) {
-    return encodedRedirect(
-      "error",
-      "/sign-up",
-      "Email and password are required",
-    );
+    return encodedRedirect("error", "/sign-up", "Email and password are required");
   }
 
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    options: {
-      emailRedirectTo: `http://localhost:3000/auth/callback`,
-    },
+    options: { emailRedirectTo: `http://localhost:3000/auth/callback` },
   });
 
   if (error) {
     console.error(error.code + " " + error.message);
     return encodedRedirect("error", "/sign-up", error.message);
+  }
+
+  // 🔹 Get the authenticated user
+
+
+  const user = data.user;
+  console.log(user);
+
+  if (!user) {
+    console.error("User object is null!");
+    return;
+  }
+
+  console.log("User ID:", user.id);
+  console.log("User Email:", user.email);
+
+
+  // 🔹 Check if user already exists
+  const { data: existingUser, error: fetchError } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("user_id", user.id)
+    .single();
+
+  if (fetchError && fetchError.code !== "PGRST116") { // Ignore "row not found" errors
+    console.error("Error checking existing profile:", fetchError.message);
+    return;
+  }
+
+  if (existingUser) {
+    console.log("User already exists in profiles. Skipping insert.");
+    return;
+  }
+
+  // 🔹 Insert into Profiles Table
+  const { error: profileError } = await supabase.from("profiles").insert([
+    {
+      user_id: user.id,
+      username: user.email.split("@")[0], 
+      role: "user",
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    },
+  ]);
+
+  if (profileError) {
+    console.error("Profile Insertion Error:", profileError.message);
   } else {
-    return encodedRedirect(
-      "success",
-      "/sign-up",
-      "Thanks for signing up! Please check your email for a verification link.",
-    );
+    console.log("✅ Profile successfully inserted!");
   }
 };
 
+
+
 export const signInwithOAuthAction = async () => {
-  console.log("signing in with google");
+  console.log("Signing in with Google");
   const supabase = await createClient();
 
   const { data, error } = await supabase.auth.signInWithOAuth({
-    'provider': 'google',
-    options: { 
-      redirectTo: `http://localhost:3000/auth/callback`
-  }
-  })
+    provider: "google",
+    options: { redirectTo: `http://localhost:3000/auth/callback` },
+  });
 
   if (error) {
-    console.error("ERROR: ", error.message); 
+    console.error("OAuth ERROR:", error.message);
+    return;
   }
-  else{
-    console.log("DATA: ", data);
-    if(data?.url)
-      redirect(data.url);
+
+  console.log("OAuth Data:", data);
+
+  // 🔹 Fetch the authenticated user
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+  if (userError) {
+    console.error("User fetch error:", userError.message);
+    return;
   }
-  
-}
+
+  console.log("Authenticated User:", userData);
+
+  const user = userData.user;
+  if (!user) {
+    console.error("User object is null!");
+    return;
+  }
+
+  console.log("User ID:", user.id);
+  console.log("User Email:", user.email);
+
+  // 🔹 Check if user already exists
+  const { data: existingUser, error: fetchError } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("user_id", user.id)
+    .single();
+
+  if (fetchError && fetchError.code !== "PGRST116") { // Ignore "row not found" errors
+    console.error("Error checking existing profile:", fetchError.message);
+    return;
+  }
+
+  if (existingUser) {
+    console.log("User already exists in profiles. Skipping insert.");
+    return;
+  }
+
+  // 🔹 Insert into Profiles Table
+  const { error: profileError } = await supabase.from("profiles").insert([
+    {
+      user_id: user.id,
+      username: user.email.split("@")[0], 
+      role: "user",
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    },
+  ]);
+
+  if (profileError) {
+    console.error("Profile Insertion Error:", profileError.message);
+  } else {
+    console.log("✅ Profile successfully inserted!");
+  }
+};
+
+
+
 
 export const signInAction = async (formData: FormData) => {
   const email = formData.get("email") as string;
