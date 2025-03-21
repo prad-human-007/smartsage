@@ -1,12 +1,28 @@
+import { supabase } from "@/lib/supabaseClient";
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
-
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY; // Replace with your Gemini API key
 
 export async function POST(req: NextRequest) {
   try {
+    // Extract user from Supabase Auth
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const userId = user.id;
+
+    // Extract class_id from query params or request body
+    const { searchParams } = new URL(req.url);
+    const classId = searchParams.get("class_id");
+
+    if (!classId) {
+      return NextResponse.json({ error: "Class ID is required" }, { status: 400 });
+    }
+
+    // Extract file from request
     const formData = await req.formData();
     const file = formData.get("file") as File;
 
@@ -14,39 +30,50 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
     }
 
-    // ✅ Upload file to Supabase Storage
-    const fileBuffer = Buffer.from(await file.arrayBuffer());
-    const fileName = `documents/${Date.now()}-${file.name}`;
+    // Validate file type (only PDFs allowed)
+    if (file.type !== "application/pdf") {
+      return NextResponse.json({ error: "Only PDF files are allowed" }, { status: 400 });
+    }
 
+    // Convert File to Buffer
+    const arrayBuffer = await file.arrayBuffer();
+    const fileBuffer = Buffer.from(arrayBuffer);
+
+    // Generate Unique File Name
+    const fileName = `${Date.now()}-${file.name}`;
+
+    // Upload File to Supabase Storage
     const { data: uploadData, error: uploadError } = await supabase.storage
-      .from("documents")
-      .upload(fileName, fileBuffer, { contentType: file.type });
+      .from("documents") // Supabase Storage bucket name
+      .upload(fileName, fileBuffer, { contentType: "application/pdf" });
 
     if (uploadError) {
+      console.error("Upload Error:", uploadError.message);
       return NextResponse.json({ error: "File upload failed" }, { status: 500 });
     }
 
-    // ✅ Get public URL of file
-    const fileUrl = supabase.storage.from("documents").getPublicUrl(fileName).data.publicUrl;
-
-    // ✅ Send to Gemini for Processing
-    const geminiResponse = await fetch(`https://api.gemini.com/process`, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${GEMINI_API_KEY}`,
-        "Content-Type": "application/json",
+    // Insert File Metadata into Supabase Database
+    const { error: insertError } = await supabase.from("documents").insert([
+      {
+        file_name: fileName,
+        file_url: uploadData.path,
+        user_id: userId,
+        class_id: classId,
+        created_at: new Date().toISOString(),
       },
-      body: JSON.stringify({ fileUrl }),
-    });
+    ]);
 
-    if (!geminiResponse.ok) {
-      return NextResponse.json({ error: "Gemini processing failed" }, { status: 500 });
+    if (insertError) {
+      console.error("Database Insert Error:", insertError.message);
+      return NextResponse.json({ error: "Database insert failed" }, { status: 500 });
     }
 
-    const geminiData = await geminiResponse.json();
-
-    return NextResponse.json({ message: "Processed by Gemini", data: geminiData }, { status: 200 });
+    return NextResponse.json(
+      { message: "File uploaded successfully!", url: uploadData.path },
+      { status: 200 }
+    );
   } catch (error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    console.error("Unexpected Error:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

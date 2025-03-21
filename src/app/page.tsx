@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import Lottie from "lottie-react";
 import animationData from "@/animations/login-img.json"; // Ensure the correct file path
-
+import { useAuth } from "@/utils/supabase/auth-context";
 const CustomButton = ({ text, onClick }: { text: string; onClick: () => void }) => {
  
   return (
@@ -19,10 +19,11 @@ const CustomButton = ({ text, onClick }: { text: string; onClick: () => void }) 
 export default function LandingPage() {
 
   const router = useRouter();
+  const {user, token} = useAuth();
   
   return (
     <div className="flex flex-col items-center justify-center bg-gray-100 p-6">
-      <h1 className="text-7xl text-gray-800 mb-10 text-center">Welcome to Smart Sage</h1>
+      <h1 className="text-7xl text-gray-800 mb-10 text-center">Welcome to Smart Sage {user?.email}</h1>
 
       {/* Peach Card Covering Almost Entire Width */}
       <div className="bg-[#FFDAB9] p-10 rounded-3xl shadow-xl flex flex-col md:flex-row items-center gap-8 w-[95%] mx-auto">
