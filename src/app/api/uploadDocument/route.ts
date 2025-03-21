@@ -1,28 +1,31 @@
-import { supabase } from "@/lib/supabaseClient";
 import { NextRequest, NextResponse } from "next/server";
+import { supabase } from "@/../lib/supabase";
 
 export async function POST(req: NextRequest) {
   try {
-    // Extract user from Supabase Auth
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
+    // ✅ Get Authorization token from headers
+    const token = req.headers.get("Authorization")?.replace("Bearer ", "");
 
-    if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized: No token found" }, { status: 401 });
     }
-    const userId = user.id;
 
-    // Extract class_id from query params or request body
-    const { searchParams } = new URL(req.url);
-    const classId = searchParams.get("class_id");
+    // ✅ Authenticate user using token
+    const { data: userData, error: authError } = await supabase.auth.getUser(token);
 
+    if (authError || !userData?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized: Invalid user" }, { status: 401 });
+    }
+
+    const userId = userData.user.id;
+
+    // ✅ Ensure class_id is provided
+    const classId = new URL(req.url).searchParams.get("class_id");
     if (!classId) {
       return NextResponse.json({ error: "Class ID is required" }, { status: 400 });
     }
 
-    // Extract file from request
+    // ✅ Get the file from form data
     const formData = await req.formData();
     const file = formData.get("file") as File;
 
@@ -30,36 +33,43 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
     }
 
-    // Validate file type (only PDFs allowed)
     if (file.type !== "application/pdf") {
       return NextResponse.json({ error: "Only PDF files are allowed" }, { status: 400 });
     }
 
-    // Convert File to Buffer
-    const arrayBuffer = await file.arrayBuffer();
-    const fileBuffer = Buffer.from(arrayBuffer);
-
-    // Generate Unique File Name
+    // ✅ Upload file to Supabase Storage
     const fileName = `${Date.now()}-${file.name}`;
+    const filePath = `${classId}/${fileName}`;
 
-    // Upload File to Supabase Storage
     const { data: uploadData, error: uploadError } = await supabase.storage
-      .from("documents") // Supabase Storage bucket name
-      .upload(fileName, fileBuffer, { contentType: "application/pdf" });
+      .from("documents")
+      .upload(filePath, file);
 
     if (uploadError) {
       console.error("Upload Error:", uploadError.message);
       return NextResponse.json({ error: "File upload failed" }, { status: 500 });
     }
 
-    // Insert File Metadata into Supabase Database
+    // ✅ Generate signed URL
+    const { data: signedUrlData, error: signedUrlError } = await supabase
+      .storage
+      .from("documents")
+      .createSignedUrl(uploadData.path, 60 * 60);
+
+    if (signedUrlError) {
+      console.error("Signed URL Error:", signedUrlError.message);
+      return NextResponse.json({ error: "Failed to generate signed URL" }, { status: 500 });
+    }
+
+    const fileUrl = signedUrlData.signedUrl;
+
+    // ✅ Insert file metadata into database
     const { error: insertError } = await supabase.from("documents").insert([
       {
         file_name: fileName,
-        file_url: uploadData.path,
+        file_url: fileUrl,
         user_id: userId,
         class_id: classId,
-        created_at: new Date().toISOString(),
       },
     ]);
 
@@ -68,10 +78,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Database insert failed" }, { status: 500 });
     }
 
-    return NextResponse.json(
-      { message: "File uploaded successfully!", url: uploadData.path },
-      { status: 200 }
-    );
+    return NextResponse.json({ message: "File uploaded successfully!", fileUrl }, { status: 200 });
+
   } catch (error) {
     console.error("Unexpected Error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

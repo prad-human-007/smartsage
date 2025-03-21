@@ -1,10 +1,10 @@
 "use client";
-import { useSearchParams } from "next/navigation";
-import FileUpload from "@/components/fileUpload";
+import { useParams } from "next/navigation";
+import FileUpload from "@/app/components/fileUpload";
 
 export default function NotesPage() {
-  const searchParams = useSearchParams();
-  const classId = searchParams.get("class_id");
+  const params = useParams();
+  const classId = params.class_id; // ✅ Get class_id from dynamic route
 
   if (!classId) {
     return <p className="text-red-500">Class ID is missing!</p>;

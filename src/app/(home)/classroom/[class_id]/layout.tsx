@@ -1,4 +1,4 @@
-import { ClassroomSidebar } from "@/components/home/sidebar/ClassroomSidebar";
+import { ClassroomSidebar } from "@/app/components/home/sidebar/ClassroomSidebar";
 import { ReactNode } from "react";
 
 export default function Layout({children, params: {class_id}} : {children: ReactNode, params: {class_id: string}}) {

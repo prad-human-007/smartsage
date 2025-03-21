@@ -5,12 +5,12 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 import educationAnimation from "@/animations/login-img.json"; // Ensure the correct file path
-import { FormMessage, Message } from "@/components/auth/form-message";
-import { SubmitButton } from "@/components/auth/submit-button";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { FormMessage, Message } from "@/app/components/auth/form-message";
+import { SubmitButton } from "@/app/components/auth/submit-button";
+import { Label } from "@/app/components/ui/label";
+import { Input } from "@/app/components/ui/input";
 import { signUpAction, signInwithOAuthAction } from "@/app/actions";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/components/ui/button";
 
 
 export default function SignUpPage() {

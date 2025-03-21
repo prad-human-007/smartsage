@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/components/ui/button";
 import { CreateClass } from "../CreateClassButton";
 import { JoinClass } from "../JoinClassButton";
 import { useAuth } from "@/utils/supabase/auth-context";
